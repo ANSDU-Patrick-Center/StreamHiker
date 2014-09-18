@@ -2,7 +2,7 @@
 
 ### Authors:
 
-Jerry Mead, Alexander M. Waldman
+Jerry Mead, Alexander M. Waldman (@Alexander-M-Waldman)
 
 ### Program Description:
 
