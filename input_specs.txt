@@ -1,0 +1,14 @@
+sampA
+flt
+stlink_tarea
+fdrb_testarea
+reachmap
+reachdrainage
+32618
+C:\Program Files (x86)\Boundless\OpenGeo\pgsql\bin
+sh2014
+postgres
+password
+shdev
+200
+reachflows
