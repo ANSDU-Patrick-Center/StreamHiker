@@ -13,3 +13,16 @@ Finally, the program calculates network flow characteristics for use in aggregat
 Please see the wikipage (https://github.com/ANSDU-Patrick-Center-for-Env-Research/StreamHiker/wiki) which details issues and next steps!
 
 For more information, plesae contact Alex Waldman: amw47@drexel.edu
+
+StreamHiker is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  StreamHiker is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with StreamHiker.  If not, see <http://www.gnu.org/licenses/>.
