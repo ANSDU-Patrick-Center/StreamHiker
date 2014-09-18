@@ -1,5 +1,3 @@
-### StreamHiker ReadMe
-
 ### Authors:
 
 Jerry Mead, Alexander M. Waldman
