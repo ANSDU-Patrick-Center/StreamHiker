@@ -1,8 +1,10 @@
-StreamHiker
-============
-Authors:
+### Program Name: StreamHiker
+
+### Authors:
+
 Jerry Mead, Alexander M. Waldman
-====================
+
+### Program Description:
 
 StreamHiker is a program for facilitating watershed analysis at the "reach" scale.
 
@@ -13,6 +15,8 @@ Finally, the program calculates network flow characteristics for use in aggregat
 For usage instructions, please see the wikipage (https://github.com/ANSDU-Patrick-Center-for-Env-Research/StreamHiker/wiki) which also details issues and next steps!
 
 For more information, plesae contact Alex Waldman: amw47@drexel.edu
+
+### License Info:
 
 StreamHiker is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
