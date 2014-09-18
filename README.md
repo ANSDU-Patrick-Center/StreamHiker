@@ -4,11 +4,12 @@ Authors:
 Jerry Mead, Alexander M. Waldman
 ====================
 
-StreamHiker – an ANS-developed model for evaluating environmental conditions (e.g. land use/land cover, subsurface, climate) along a stream or river reach and associated drainage area, at multiple spatial scales (e.g. reach, network) – is used by the modeling team for: 
+StreamHiker is a program for facilitating watershed analysis at the "reach" scale.
 
-  • Developing and evaluating accuracy of techniques for extrapolating watershed model estimates of water quality   
-      parameters at the reach scale 
-      
-  • Developing and evaluating high resolution watershed-scale models of various levels of complexity (statistical models of varying spatial complexity, with and without network routing, and with some deterministic elements).  
-  
-  • Investigating how BMPs affect surface water quality (i.e. temperature) and ecological well-being (i.e. fish growth potential), developing models to predict performance and optimize placement of BMPs to achieve indicator targets, and quantifying uncertainty of predictions.
+Taking user-provided input files (stream link raster and flow direction raster) and specified target reach length, the program first splits the stream link raster into segments of targeted lengths, each with a unique reach ID, then develops a "lateral" drainage raster map of the coverage area with each cell having a reach ID value for the stream reach it laterally drains to.
+
+Finally, the program calculates network flow characteristics for use in aggregating data at the network scale (i.e. reach length, flow from, flow to, upstream junction reach ids and aggregation order).
+
+Please see the wikipage which details issues and next steps!
+
+For more information, plesae contact Alex Waldman: amw47@drexel.edu
