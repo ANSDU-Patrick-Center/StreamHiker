@@ -1,3 +1,4 @@
+! Developed for compiling with Compaq Visual Fortran Ver. 6.6
 PROGRAM GetNetwork
 IMPLICIT NONE
 INTEGER(8)::Row, Col, NRows, NCols, SrchRec, NumRec, NumValues, SearchNbor, Loop,Counted, MaxReach
