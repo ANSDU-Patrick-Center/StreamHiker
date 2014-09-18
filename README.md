@@ -1,10 +1,10 @@
-### Program Name: StreamHiker
+### StreamHiker ReadMe
 
 ### Authors:
 
-Jerry Mead, Alexander M. Waldman (@Alexander-M-Waldman)
+Jerry Mead, Alexander M. Waldman
 
-### Program Description:
+### Description:
 
 StreamHiker is a program for facilitating watershed analysis at the "reach" scale.
 
