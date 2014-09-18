@@ -1,5 +1,8 @@
-Stream-Hiker
+StreamHiker
 ============
+Authors:
+Jerry Mead, Alexander M. Waldman
+====================
 
 StreamHiker – an ANS-developed model for evaluating environmental conditions (e.g. land use/land cover, subsurface, climate) along a stream or river reach and associated drainage area, at multiple spatial scales (e.g. reach, network) – is used by the modeling team for: 
 
