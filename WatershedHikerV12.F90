@@ -1,3 +1,4 @@
+! Developed for compiling with Compaq Visual Fortran Ver. 6.6
 PROGRAM Reach_Drainage
 REAL(4)::TempRow,TempCol,NoValue,Real_Reach,FlowDir_Map 
 REAL(4)::Value
