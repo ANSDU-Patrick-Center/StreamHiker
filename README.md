@@ -10,6 +10,6 @@ Taking user-provided input files (stream link raster and flow direction raster) 
 
 Finally, the program calculates network flow characteristics for use in aggregating data at the network scale (i.e. reach length, flow from, flow to, upstream junction reach ids and aggregation order).
 
-Please see the wikipage which details issues and next steps!
+Please see the wikipage (https://github.com/ANSDU-Patrick-Center-for-Env-Research/StreamHiker/wiki) which details issues and next steps!
 
 For more information, plesae contact Alex Waldman: amw47@drexel.edu
