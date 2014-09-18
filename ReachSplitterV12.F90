@@ -1,3 +1,4 @@
+! Developed for compiling with Compaq Visual Fortran Ver. 6.6
 PROGRAM Lnk2Rch
 IMPLICIT None
 INTEGER::Loop
