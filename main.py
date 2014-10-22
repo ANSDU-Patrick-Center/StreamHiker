@@ -74,9 +74,9 @@ ras_specs = sh_modules.getRasterDims(stlink_loc)
 #-----------------------------------------------------------------------------------------------------
 outf = open(outfile, 'w')
 
-outf.write(reachmap_loc + '\n')
-outf.write(fdrmap_loc + '\n')
-outf.write(sh_ls_ras_loc + '\n')
+outf.write(reachmap_name + '\n')
+outf.write(fdrmap_name + '\n')
+outf.write(sh_ls_ras_name + '\n')
 outf.write(str(int(float(ras_specs[0]))) + '\n')
 outf.write(str(int(float(ras_specs[1]))) + '\n')
 outf.write(ras_specs[2] + '\n')
@@ -88,9 +88,9 @@ outf.close()
 
 outf2 = open(outfile2, 'w')
 
-outf2.write(stlink_loc + '\n')
-outf2.write(fdrmap_loc + '\n')
-outf2.write(reachmap_loc + '\n')
+outf2.write(stlink_name + '\n')
+outf2.write(fdrmap_name + '\n')
+outf2.write(reachmap_name + '\n')
 outf2.write(str(int(float(ras_specs[0]))) + '\n')
 outf2.write(str(int(float(ras_specs[1]))) + '\n')
 outf2.write(ras_specs[2] + '\n')
@@ -116,7 +116,9 @@ outlogf.write("Start running MakeTempFile.exe ")
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-os.remove(templatetempras)
+while os.path.exists(templatetempras):
+    print "found"
+    os.remove(templatetempras)
 os.system('MakeTempFileV12.exe')
 print "Finished running MakeTempFile.exe "
 print timeit.default_timer() - start_time
