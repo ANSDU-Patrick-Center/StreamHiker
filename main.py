@@ -68,7 +68,7 @@ reach_tar_len = format(int(reach_tar_len), '.3f')
 logfile = mydir + "\\" + 'logfile' + file_suffix + '.txt'   # assign logfile name
 #-----------------------------------------------------------------------------------------------------
 # get raster specs from stlink raster:
-ras_specs = sh_modules12b.getRasterDims(stlink_loc)
+ras_specs = sh_modules.getRasterDims(stlink_loc)
 #-----------------------------------------------------------------------------------------------------
 # Populate output files for use in ReachSplitter, ReachNeighbors & WatershedHiker.exe
 #-----------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
 os.system('ReachSplitterV12.exe')
-sh_modules12b.getrasprj(reachmap_name,fdrmap_name,mydir)  #assign raster prj from input fdr raster
+sh_modules.getrasprj(reachmap_name,fdrmap_name,mydir)  #assign raster prj from input fdr raster
 print "Finished running reachsplitter.exe "
 print timeit.default_timer() - start_time
 outlogf.write("Finished running reachsplitter.exe ")
@@ -196,7 +196,7 @@ outlogf.write("Start getting flow network specs ")
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.getffs(db_name, db_usr_name, db_pw, db_schema, mydir, ftable_name, fcsv_name)
+sh_modules.getffs(db_name, db_usr_name, db_pw, db_schema, mydir, ftable_name, fcsv_name)
 print "Finished getting flow network specs"
 print timeit.default_timer() - start_time
 outlogf.write("Finished getting flow network specs ")
@@ -214,7 +214,7 @@ outlogf.write("Start getting network aggregation sequence and upstream junction 
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.getaggseq(db_name, db_usr_name, db_pw, db_schema, mydir, ftable_name, seqtable_name, lcsv_name, tlentab_name)
+sh_modules.getaggseq(db_name, db_usr_name, db_pw, db_schema, mydir, ftable_name, seqtable_name, lcsv_name, tlentab_name)
 print "Finished getting network aggregation sequence and upstream junction reach IDs"
 print timeit.default_timer() - start_time
 outlogf.write("Finished getting network aggregation sequence and upstream junction reach IDs ")
@@ -233,7 +233,7 @@ start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
 os.system('WatershedHikerV12.exe')
-sh_modules12b.getrasprj(sh_ls_ras_name,fdrmap_name,mydir)  #assign raster prj from input fdr raster
+sh_modules.getrasprj(sh_ls_ras_name,fdrmap_name,mydir)  #assign raster prj from input fdr raster
 print "Finished running WatershedHiker.exe "
 print timeit.default_timer() - start_time
 outlogf.write("Finished running WatershedHiker.exe ")
@@ -251,7 +251,7 @@ outlogf.write("Start converting lateral shed raster to polygon shapefile  ")
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.ras2poly(sh_ls_ras_name, latshedpoly_name)
+sh_modules.ras2poly(sh_ls_ras_name, latshedpoly_name)
 print "Finished converting lateral shed raster to polygon shapefile  "
 print timeit.default_timer() - start_time
 outlogf.write("Finished converting lateral shed raster to polygon shapefile  ")
@@ -269,7 +269,7 @@ outlogf.write("Start uploading lateral shed polygon shapefile to PostGIS databas
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.loadshppgis(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, latshedpoly_name, geom_srid)
+sh_modules.loadshppgis(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, latshedpoly_name, geom_srid)
 print "Finished uploading lateral shed polygon shapefile to PostGIS database table "
 print timeit.default_timer() - start_time
 outlogf.write("Finished uploading lateral shed polygon shapefile to PostGIS database table ")
@@ -287,7 +287,7 @@ outlogf.write("Start calculating lateral shed areas and update PostGIS database 
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.calc_ls_area(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, latshedpoly_name, geom_srid, seqtable_name)
+sh_modules.calc_ls_area(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, latshedpoly_name, geom_srid, seqtable_name)
 print "Finished calculating lateral shed areas and update PostGIS database table "
 print timeit.default_timer() - start_time
 outlogf.write("Finished calculating lateral shed areas and update PostGIS database table ")
@@ -305,7 +305,7 @@ outlogf.write("Start calculating junction specs and populate PostGIS database ta
 start_time = timeit.default_timer()
 print start_time
 outlogf.write(str(start_time) + '\n')
-sh_modules12b.make_j_specs(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, seqtable_name, geom_srid, j_tab_name)
+sh_modules.make_j_specs(db_name, db_usr_name, db_pw, db_schema, mydir, pgsqlbinpath, seqtable_name, geom_srid, j_tab_name)
 print "Finished calculating junction specs and populate PostGIS database table   "
 print timeit.default_timer() - start_time
 outlogf.write("Finished calculating junction specs and populate PostGIS database table  ")
