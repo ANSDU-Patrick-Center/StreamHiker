@@ -9,7 +9,7 @@ inputfile_old = inputfile + '_old.txt'
 inputfile = inputfile + '.txt'
 print "input file: ", inputfile
 help_text = "default"
-gomain = ".\main12a.py"
+gomain = ".\main.py"
 
 class mainwindow:
     def __init__(self, master):
