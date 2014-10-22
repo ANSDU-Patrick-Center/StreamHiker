@@ -748,8 +748,6 @@ def make_j_specs(dbname, dbusrname, dbpw, dbschema, dir, pgsqlbinpath, seqtable_
                 sys.exit(4)
             
             my_j_to = rsrow['reachto']
-            print "my_j_aggseq", my_j_aggseq 
-            print "my_j_to", my_j_to
             
             SQL5 = (
                     "UPDATE %s SET j_to = %s WHERE reachid = %s; "
