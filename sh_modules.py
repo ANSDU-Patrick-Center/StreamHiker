@@ -565,4 +565,206 @@ def getaggseq(dbname, dbusrname, dbpw, dbschema, dir, ftable_name, seqtable_name
             con.close()
             print "finished"
 
+#-----------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------
+#  calc_ls_area:   Calculates lateral shed areas (in sqkm) and populates postgis table                     |
+#-----------------------------------------------------------------------------------------------------------
+def calc_ls_area(dbname, dbusrname, dbpw, dbschema, dir, pgsqlbinpath, ls_geom_tab_name, srid, seqtable_name):
+    
+    con = None    
+    reachid = 0
+    reachto = 0
+    ls_geom_tab_loc = dbschema + "." + ls_geom_tab_name
+    seqtab_loc = dbschema + "." + seqtable_name
+    print seqtab_loc
+    temp_ls_area_tab = dbschema + "." + 'temp_ls_area'
+    
+ 
+    try:
+        con = psycopg2.connect(database = dbname, user= dbusrname, password= dbpw) 
+        cur1 = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #==============================================================================    
+        cur1.execute('SELECT version()')
+        ver = cur1.fetchone() 
+    #===============================================================================
+        
+        SQL1 = (
+                "DROP TABLE IF EXISTS %s ; "
+                "CREATE TABLE %s AS "
+                "SELECT reachid, sum(ST_AREA(geom)) / 1000000 AS ls_area_sqkm "     # units taken from geom coordinate system (here, meters)
+                "FROM %s "
+                "WHERE reachid > 0 "
+                "GROUP BY reachid;"
+                )%(temp_ls_area_tab, temp_ls_area_tab, ls_geom_tab_loc)
+                
+        try:
+            cur1.execute(SQL1)
+            con.commit()
+      
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            sys.exit(1)
+            
+        SQL2 = (             
+               "ALTER TABLE %s ADD COLUMN ls_area_sqkm float8 default 0.0; "
+             
+               "UPDATE %s rs set ls_area_sqkm = asqkm.ls_area_sqkm "
+                    "FROM %s asqkm "
+                    "WHERE rs.reachid = asqkm.reachid; "
+               "DROP TABLE IF EXISTS %s; "
+               )%(seqtab_loc, seqtab_loc, temp_ls_area_tab,temp_ls_area_tab) 
+               
+        try:
+            cur1.execute(SQL2)
+            con.commit()
+      
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            sys.exit(2)
 
+    finally:
+        if con:
+            con.close()
+            print "finished"
+
+#-----------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------
+#  Make Juntion_Specs Table:   Calculates Junction specs and populates PostGIS                             |
+#-----------------------------------------------------------------------------------------------------------
+
+def make_j_specs(dbname, dbusrname, dbpw, dbschema, dir, pgsqlbinpath, seqtable_name, srid, j_tab_name):
+    
+    con = None    
+    reachid = 0
+    reachto = 0
+    j_tab_loc = dbschema + "." + j_tab_name
+    seqtab_loc = dbschema + "." + seqtable_name
+    my_j_aggseq = 0
+
+    try:
+        con = psycopg2.connect(database = dbname, user= dbusrname, password= dbpw) 
+        cur1 = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    #==============================================================================    
+        cur1.execute('SELECT version()')
+        ver = cur1.fetchone() 
+    #===============================================================================
+
+        SQL1 = (
+                "DROP TABLE IF EXISTS %s ; "
+                "CREATE TABLE %s AS "
+                "SELECT rs.reachid, rs.reachto, rs.numff, rs.ff1 AS reach_ff1, rs.ff2 AS reach_ff2, rs.ff3 AS reach_ff3, rs.aggseq_rid AS reach_aggseq, rs.reach_length AS reach_length_m " 
+                "FROM %s rs "
+                "WHERE numff > 1; "
+                       
+                "DROP TABLE IF EXISTS shdev.junction_specs2; "
+                "CREATE TABLE shdev.junction_specs2 AS "
+                    "SELECT foo2.*, rs3.upjun_rid AS j_ff3 "
+                    "FROM ( "
+                        "SELECT foo1.*, rs2.upjun_rid AS j_ff2 "
+                        "FROM ( "
+                            "SELECT js.*, rs1.upjun_rid AS j_ff1 "
+                            "FROM %s js "
+                            "LEFT JOIN %s rs1 ON rs1.reachid = js.reach_ff1 "
+                            ") foo1 "
+                        "LEFT JOIN %s rs2 ON rs2.reachid = reach_ff2 "
+                        ") foo2 "
+                    "LEFT JOIN %s rs3 ON rs3.reachid = reach_ff3 "
+                "; "
+                
+                "DROP TABLE IF EXISTS %s; "
+                "CREATE TABLE %s AS "
+                
+                "SELECT js.*, foo.* "
+                "FROM shdev.junction_specs2 js "
+                "LEFT JOIN (SELECT upjun_rid, sum(reach_length) AS j_reach_length_m, sum(ls_area_sqkm) AS j_ls_area_sqkm "
+                "FROM %s rs "
+                "GROUP BY rs.upjun_rid) foo ON foo.upjun_rid = js.reachid; "
+                
+                "UPDATE %s "
+                    "SET j_ff1 = 0 "
+                    "WHERE j_ff1 IS NULL; "
+                "UPDATE %s " 
+                    "SET j_ff2 = 0 "
+                    "WHERE j_ff2 IS NULL; "
+                "UPDATE %s " 
+                    "SET j_ff3 = 0 "
+                    "WHERE j_ff3 IS NULL; "
+                
+                "DROP TABLE IF EXISTS shdev.junction_specs2; "
+                )%(j_tab_loc, j_tab_loc, seqtab_loc, j_tab_loc, seqtab_loc, seqtab_loc, seqtab_loc, j_tab_loc, j_tab_loc, seqtab_loc, j_tab_loc, j_tab_loc, j_tab_loc) 
+        
+        try:
+                cur1.execute(SQL1)
+                con.commit()
+         
+        except psycopg2.DatabaseError, e:
+                print 'Error %s' % e
+                sys.exit(1)
+                
+        SQL2 = (
+                "SELECT * "
+                "FROM %s "
+                "ORDER BY reach_aggseq; " 
+                    )%(j_tab_loc)
+            
+        try:
+            cur1.execute(SQL2)
+            jrows = cur1.fetchall()
+            
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            sys.exit(2)
+            
+        SQL3 = (
+                "ALTER TABLE %s ADD COLUMN j_to integer; " 
+                "ALTER TABLE %s ADD COLUMN j_agg_seq integer; "         
+                )%(j_tab_loc, j_tab_loc)
+        try:
+            cur1.execute(SQL3)
+            con.commit()
+            
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            sys.exit(3)
+            
+        for jrow in jrows:
+            
+            j_rid = jrow['reachid']
+            my_j_aggseq += 1
+            
+            SQL4 = (
+                    "SELECT * "
+                    "FROM %s rs "
+                    "WHERE rs.upjun_rid = %s "
+                    "ORDER BY aggseq_rid DESC "
+                    "LIMIT 1; "                 
+                    )%(seqtab_loc, j_rid)
+            try:
+                cur1.execute(SQL4)
+                rsrow = cur1.fetchone()
+                
+            except psycopg2.DatabaseError, e:
+                print 'Error %s' % e
+                sys.exit(4)
+            
+            my_j_to = rsrow['reachto']
+            print "my_j_aggseq", my_j_aggseq 
+            print "my_j_to", my_j_to
+            
+            SQL5 = (
+                    "UPDATE %s SET j_to = %s WHERE reachid = %s; "
+                    "UPDATE %s SET j_agg_seq = %s WHERE reachid = %s; "                                
+                    )%(j_tab_loc, my_j_to, j_rid, j_tab_loc, my_j_aggseq, j_rid)
+                    
+            try:
+                cur1.execute(SQL5)
+                con.commit()
+                
+            except psycopg2.DatabaseError, e:
+                print 'Error %s' % e
+                sys.exit(5)
+        
+    finally:
+        if con:
+            con.close()
+            print "finished"
