@@ -654,7 +654,7 @@ def make_j_specs(dbname, dbusrname, dbpw, dbschema, dir, pgsqlbinpath, seqtable_
                 "CREATE TABLE %s AS "
                 "SELECT rs.reachid, rs.reachto, rs.numff, rs.ff1 AS reach_ff1, rs.ff2 AS reach_ff2, rs.ff3 AS reach_ff3, rs.aggseq_rid AS reach_aggseq, rs.reach_length AS reach_length_m " 
                 "FROM %s rs "
-                "WHERE numff > 1; "
+                "WHERE numff != 1; "
                        
                 "DROP TABLE IF EXISTS shdev.junction_specs2; "
                 "CREATE TABLE shdev.junction_specs2 AS "
