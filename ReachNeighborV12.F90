@@ -10,22 +10,24 @@ INTEGER(4)::Reach, FocalCell, SearchReach, FlowDir
 REAL(4)::Value, Real_FlowDir, Real_Reach
 CHARACTER(64)::ReachMap,Flowdirection
 ! ***************************************************** Full version *****************************************************
-OPEN(5, file = "output_specs1.txt", FORM = "FORMATTED", STATUS = "OLD")
+OPEN(6, file = "output_specs1.txt", FORM = "FORMATTED", STATUS = "OLD")
 !Geographic extent of map.
 WRITE(*,*) "open"
 
-READ(5,2) ReachMap
+READ(6,2) ReachMap
 !WRITE(*,*) ReachMap
-READ(5,2) Flowdirection 
+READ(6,2) Flowdirection 
 !WRITE(*,*) Flowdirection
-READ(5,*)
-READ(5,3) NCols
+READ(6,*)
+READ(6,3) NCols
 !WRITE(*,*) NCols
-READ(5,3) NRows
+READ(6,3) NRows
 !WRITE(*,*) NRows
 
 2 FORMAT(A64)
 3 FORMAT(i8)
+
+CLOSE(6)
 ! ********************************************************************************************************************
 
 OPEN(1, file = "ReachFlows.CSV"            , FORM = "FORMATTED", STATUS = "UNKNOWN") 
